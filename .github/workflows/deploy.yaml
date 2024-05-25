@@ -26,31 +26,31 @@ jobs:
         # since that's its default command
         #uses: php-actions/composer@v6
 
-      - name: Install Node.js LTS
+      #- name: Install Node.js LTS
         # We use the LTS version of Node.js
         # and cache packages installed via yarn
-        uses: actions/setup-node@v4.0.2
-        with:
-          node-version: 'lts/*'
-          cache: 'yarn'
+        #uses: actions/setup-node@v4.0.2
+        #with:
+          #node-version: 'lts/*'
+          #cache: 'yarn'
 
-      - name: Install Node.js dependencies
-        run: yarn install
+      #- name: Install Node.js dependencies
+        #run: yarn install
 
-      - name: Build theme
-        run: |
-          yarn run build
+      #- name: Build theme
+        #run: |
+          #yarn run build
 
-      - name: Upload artifact
+      #- name: Upload artifact
         # Persist data produced during the build steps
         # with a retention period of 1 day
-        uses: actions/upload-artifact@v4.3.3
-        with:
-          name: listeo-child-build
-          path: |
-            dist/
-            vendor/
-          retention-days: 1
+        #uses: actions/upload-artifact@v4.3.3
+        #with:
+          #name: listeo-child-build
+          #path: |
+            #dist/
+            #vendor/
+          #retention-days: 1
 
   deploy:
     runs-on: ubuntu-latest
