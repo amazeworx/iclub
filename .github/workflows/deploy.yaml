@@ -62,11 +62,11 @@ jobs:
           # Fetch the entire Git history
           fetch-depth: 0
 
-      - name: Download artifact
-        uses: actions/download-artifact@v4.1.7
-        with:
-          name: listeo-child-build
-          path: .
+      # - name: Download artifact
+      #   uses: actions/download-artifact@v4.1.7
+      #   with:
+      #     name: listeo-child-build
+      #     path: .
 
       - name: Set environment variables (main)
         if: github.ref == 'refs/heads/main'
