@@ -1,0 +1,275 @@
+/*
+Theme Name:  Listeo ChildTheme
+Theme URI: http://listeo.pro
+Author: Purethemes
+Author URI: http://themeforest.net/user/purethemes
+Description: Directory WordPress Theme by Purethemes
+Version: 1.0
+License: ThemeForest
+License URI: http://themeforest.net/licenses
+Text Domain: listeo
+Domain Path: /languages/
+Tags: light, responsive-layout, post-formats, theme-options, translation-ready, two-columns
+Template:  listeo
+*/
+
+#footer ul.menu {
+  width: 100%;
+}
+span.typed-words {
+  color: #fec45c;
+}
+span.standout {
+  color: #fec45c;
+  font-weight: 600;
+}
+
+.orange a.elementor-button {
+  background-color: #fec45c;
+}
+.light-pink {
+  color: #f4f7ff;
+}
+.white {
+  color: white;
+}
+.opaque {
+  background: white;
+  opacity: 0.33;
+}
+.m-top-20 {
+  margin-top: 20px;
+}
+body,
+p,
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Rational Display", "DM Sans", sans-serif !important;
+}
+h3.headline {
+  margin: 0;
+}
+h3.headlineEB {
+  margin: 0 0 30px 0;
+}
+.headlineEB.headline-with-subtitle span,
+.headlineEB.headline-aligned-to-right.headline-with-subtitle span,
+.headlineEB.headline-aligned-to-left.headline-with-subtitle span {
+  margin-top: 14px;
+  padding-top: 14px;
+}
+.headlineEB span {
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.2em;
+  margin-top: 5px;
+  display: block;
+}
+/*.headlineEB.headline-box span:after {width: 60px;content: "";height: 2px;border-radius: 6px;background: #66676b;display: block;position: absolute;margin: 0 auto;text-align: center;top: 0;}*/
+
+.elementor-element-cd27677,
+.elementor-element-5853cee,
+.elementor-element-4acbb20,
+.elementor-element-9ba5ac1,
+.elementor-element-31281e3,
+.elementor-element-8a6d32e {
+  background: white;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  padding: 5px 20px 20px 20px;
+}
+
+h2.headline {
+  font-size: 34px;
+  line-height: 40px;
+  font-weight: 600;
+  margin: 0;
+}
+h2.headline span {
+  font-size: 23px;
+  line-height: 37px;
+}
+
+#titlebar.listing-titlebar {
+  padding-bottom: 0;
+}
+span.text-orange {
+  color: #fec45c;
+}
+
+a.elementor-button {
+  background-color: #4a1172;
+  top: 0;
+  padding: 18px 40px;
+  color: #fff;
+  position: relative;
+  font-size: 15px;
+  font-weight: 600;
+  display: inline-block;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  margin-right: 6px;
+  overflow: hidden;
+  border: none;
+  border-radius: 50px;
+}
+
+.sign-in-form label input {
+  padding-left: 10px;
+}
+
+.planEB:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.planEB {
+  flex: 1 0 25%;
+  box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  position: relative;
+  z-index: 9;
+  overflow: hidden;
+  font-size: 16px;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.plan-priceEB h3 {
+  margin: 0 0 10px;
+  font-weight: 400;
+  font-size: 22px;
+  color: #c2c2c2;
+}
+
+.plan-priceEB .value {
+  font-size: 37px;
+  line-height: 35px;
+  color: #4a1172;
+  font-weight: 600;
+}
+.plan-priceEB .period {
+  display: block;
+  font-size: 15px;
+  line-height: 18px;
+  padding: 15px 0;
+  font-style: italic;
+  border-top: 1px solid #dbdbdb;
+  border-bottom: 1px solid #dbdbdb;
+  margin: 15px 0;
+}
+
+.priceEB {
+  padding: 0;
+  margin: 0 0 20px 0;
+  font-size: 17px;
+}
+ul.priceEB,
+ul.priceEB li {
+  list-style: none;
+}
+ul.priceEB span {
+  padding-left: 10px;
+}
+.priceEB-gray {
+  color: #727474;
+}
+.priceEB li {
+  padding: 3px 0;
+}
+
+.box-regular h3,
+.box-regular ul li {
+  color: #d5caea;
+}
+.move-left10 {
+  padding-left: 10px;
+}
+.push-top10 {
+  margin-top: 10px;
+}
+.pull-top30 {
+  margin-top: -30px;
+}
+
+.label-listing_title,
+.label-listing_category,
+.label-_short_summary,
+.label-keywords,
+.label-class_established,
+.label-class_industry,
+.label-class_tech_stack,
+.label-class_language,
+.label-class_location,
+.label-_class_team,
+.label-_asking_price,
+.label-_monetization_summary,
+.label-_ttm_gross_revenue,
+.label-_last_months_gross_revenue,
+.label-_ttm_net_profit,
+.label-_last_months_net_profit,
+.label-tax-listing_feature,
+.label-_traffic_summary,
+.label-tax-region,
+.label-_video {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #25bc53;
+}
+
+.label-_monetization_pnl_file,
+.label-_monetization_pnl_url,
+.label-_traffic_breakdown,
+.label-_business_website {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #e3af34;
+}
+
+.label-listing_description {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #b452e7;
+}
+
+.form-field-_monetization_pnl_url-container,
+.form-field-_traffic_breakdown-container {
+  margin-top: 20px;
+}
+.form-field-_monetization_pnl_file-container {
+  margin-bottom: 40px;
+}
+.label-_fd_r_23_05,
+.label-_fd_p_23_05 {
+  background: #e9ecef;
+  margin-bottom: 20px;
+  padding: 5px 15px;
+  font-weight: 500;
+  color: #e3af34;
+}
+
+div.elementor-widget-container ul.listing-features {
+  display: block;
+  columns: 1;
+  font-size: 14px;
+  -webkit-columns: 1;
+  -moz-columns: 1;
+}
+
+.type-listing h3.elementor-heading-title {
+  margin-top: 30px;
+}
+
+.light-block {
+  background-color: #f9f2b5;
+  border-radius: 3px;
+  padding: 16px;
+  transform: translate3d(0, 0, 0);
+  z-index: 90;
+  position: relative;
+}
