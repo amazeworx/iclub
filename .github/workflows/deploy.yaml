@@ -21,10 +21,10 @@ jobs:
         # so our workflow can access it
         uses: actions/checkout@v4.1.6
 
-      - name: Install Composer dependencies
+      #- name: Install Composer dependencies
         # This will run `composer install`
         # since that's its default command
-        uses: php-actions/composer@v6
+        #uses: php-actions/composer@v6
 
       - name: Install Node.js LTS
         # We use the LTS version of Node.js
