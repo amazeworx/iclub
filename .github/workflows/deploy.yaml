@@ -73,14 +73,14 @@ jobs:
         run: |
           echo "SFTP_USER=${{ secrets.SFTP_PROD_USER }}" >> $GITHUB_ENV
           echo "SFTP_PASS=${{ secrets.SFTP_PROD_PASS }}" >> $GITHUB_ENV
-          echo "DEPLOY_PATH=/iclub/iclub-www/wp-content/themes/listeo-child" >> $GITHUB_ENV
+          echo "DEPLOY_PATH=/iclub-www/wp-content/themes/listeo-child" >> $GITHUB_ENV
 
       - name: Set environment variables (preview)
         if: github.ref == 'refs/heads/preview'
         run: |
           echo "SFTP_USER=${{ secrets.SFTP_STAG_USER }}" >> $GITHUB_ENV
           echo "SFTP_PASS=${{ secrets.SFTP_STAG_PASS }}" >> $GITHUB_ENV
-          echo "DEPLOY_PATH=/iclub/iclub-www/wp-content/themes/listeo-child" >> $GITHUB_ENV
+          echo "DEPLOY_PATH=/iclub-www/wp-content/themes/listeo-child" >> $GITHUB_ENV
 
       - name: Set outputs
         # Workaround to reference environment variables as inputs
