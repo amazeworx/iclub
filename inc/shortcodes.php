@@ -8,9 +8,7 @@ function listeo_featured_badge_function($atts)
 
   $output = '';
   if ($is_featured) {
-    $output .= '<div class="listing-small-badges-container">';
-    $output .= '<div class="listing-small-badge featured-badge"><i class="fa fa-star"></i>' . esc_html_e('Featured', 'listeo_core') . '</div>';
-    $output .= '</div>';
+    $output .= '<div class="listing-small-badge featured-badge"><i class="fa fa-star"></i> Featured</div>';
   }
 
   return $output;
