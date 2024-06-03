@@ -4,8 +4,10 @@
 /notes.txt
 *copy*
 /resources
+/notes
 *.DS_Store*
 package-lock.json
 package.json
 postcss.config.js
 tailwind.config.js
+/acf-json
