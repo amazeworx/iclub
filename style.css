@@ -40,7 +40,7 @@ span.standout {
 .m-top-20 {
   margin-top: 20px;
 }
-body,
+/* body,
 p,
 a,
 h1,
@@ -50,7 +50,7 @@ h4,
 h5,
 h6 {
   font-family: "Rational Display", "DM Sans", sans-serif !important;
-}
+} */
 h3.headline {
   margin: 0;
 }
