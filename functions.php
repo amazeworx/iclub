@@ -20,3 +20,18 @@ add_action('after_setup_theme', 'remove_parent_theme_features', 10);
  * remove category: from category titles
  */
 add_filter('get_the_archive_title_prefix', '__return_false');
+
+
+/**
+ * remove listeo listings post type archive
+ */
+add_filter('register_post_type_args', 'remove_listeo_listings_archive', 10, 2);
+function remove_listeo_listings_archive($args, $post_name)
+{
+    if ($post_name != 'listings')
+        return $args;
+
+    $args['has_archive'] = false;
+
+    return $args;
+}
