@@ -27,6 +27,10 @@ if (isset($_GET["action"])) {
 $packages = $data->packages;
 $user_packages = $data->user_packages;
 
+// echo '<pre>';
+// print_r($data);
+// echo '</pre>';
+
 global $woocommerce;
 // $woocommerce->cart->empty_cart();
 
@@ -52,13 +56,21 @@ global $woocommerce;
 				<?php
 				$counter = 0;
 				$single_buy_products = get_option('listeo_buy_only_once');
+				// echo '<pre>';
+				// print_r($packages);
+				// echo '</pre>';
 				foreach ($packages as $key => $package) :
 
 					$product = wc_get_product($package);
 
-					if (!$product->is_type(array('listing_package', 'listing_package_subscription')) || !$product->is_purchasable()) {
+					// Add simple product to packages
+					// if (!$product->is_type(array('listing_package', 'listing_package_subscription')) || !$product->is_purchasable()) {
+					// 	continue;
+					// }					
+					if (!$product->is_type(array('listing_package', 'listing_package_subscription', 'simple')) || !$product->is_purchasable()) {
 						continue;
 					}
+					// Add simple product to packages
 
 					if ($single_buy_products) {
 						$user = wp_get_current_user();
@@ -93,112 +105,126 @@ global $woocommerce;
 							?>
 
 							<ul>
-
-								<?php if (get_option('listeo_populate_listing_package_options')) : ?>
+								<?php
+								// Add simple product to packages
+								?>
+								<?php if (!$product->is_type(array('simple'))) : ?>
 									<?php
-									$bookingOptions = $product->has_listing_booking();
-									if ($bookingOptions) : ?>
-										<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
-												<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
-													<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
-													<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
-												</g>
-											</svg>
-											<?php esc_html_e('Booking Module enabled', 'listeo_core');  ?>
-										</li>
-									<?php endif; ?>
+									// Add simple product to packages
+									?>
+									<?php if (get_option('listeo_populate_listing_package_options')) : ?>
+										<?php
+										$bookingOptions = $product->has_listing_booking();
+										if ($bookingOptions) : ?>
+											<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
+													<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
+														<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
+														<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
+													</g>
+												</svg>
+												<?php esc_html_e('Booking Module enabled', 'listeo_core');  ?>
+											</li>
+										<?php endif; ?>
 
 
-									<?php
-									$reviewsOptions = $product->has_listing_reviews();
-									if ($reviewsOptions) : ?>
-										<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
-												<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
-													<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
-													<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
-												</g>
-											</svg>
-											<?php esc_html_e('Reviews Module enabled', 'listeo_core');  ?>
-										</li>
-									<?php endif; ?>
+										<?php
+										$reviewsOptions = $product->has_listing_reviews();
+										if ($reviewsOptions) : ?>
+											<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
+													<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
+														<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
+														<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
+													</g>
+												</svg>
+												<?php esc_html_e('Reviews Module enabled', 'listeo_core');  ?>
+											</li>
+										<?php endif; ?>
 
-									<?php
-									$sociallinksOptions = $product->has_listing_social_links();
-									if ($sociallinksOptions) : ?>
-										<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
-												<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
-													<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
-													<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
-												</g>
-											</svg>
-											<?php esc_html_e('Social Links Module enabled', 'listeo_core');  ?>
-										</li>
-									<?php endif; ?>
+										<?php
+										$sociallinksOptions = $product->has_listing_social_links();
+										if ($sociallinksOptions) : ?>
+											<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
+													<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
+														<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
+														<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
+													</g>
+												</svg>
+												<?php esc_html_e('Social Links Module enabled', 'listeo_core');  ?>
+											</li>
+										<?php endif; ?>
 
-									<?php
-									$openinghoursOptions = $product->has_listing_opening_hours();
-									if ($openinghoursOptions) : ?>
-										<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
-												<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
-													<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
-													<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
-												</g>
-											</svg>
-											<?php esc_html_e('Opening Hours Module enabled', 'listeo_core');  ?>
-										</li>
-									<?php endif; ?>
+										<?php
+										$openinghoursOptions = $product->has_listing_opening_hours();
+										if ($openinghoursOptions) : ?>
+											<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
+													<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
+														<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
+														<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
+													</g>
+												</svg>
+												<?php esc_html_e('Opening Hours Module enabled', 'listeo_core');  ?>
+											</li>
+										<?php endif; ?>
 
-									<?php
-									$vidosOptions = $product->has_listing_video();
-									if ($vidosOptions) : ?>
-										<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
-												<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
-													<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
-													<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
-												</g>
-											</svg>
-											<?php esc_html_e('Video option enabled', 'listeo_core');  ?>
-										</li>
-									<?php endif; ?>
+										<?php
+										$vidosOptions = $product->has_listing_video();
+										if ($vidosOptions) : ?>
+											<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
+													<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
+														<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
+														<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
+													</g>
+												</svg>
+												<?php esc_html_e('Video option enabled', 'listeo_core');  ?>
+											</li>
+										<?php endif; ?>
 
-									<?php
-									$couponsOptions = $product->has_listing_coupons();
-									if ($couponsOptions == 'yes') : ?>
-										<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
-												<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
-													<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
-													<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
-												</g>
-											</svg>
-											<?php esc_html_e('Coupons option enabled', 'listeo_core');  ?>
-										</li>
-									<?php endif; ?>
+										<?php
+										$couponsOptions = $product->has_listing_coupons();
+										if ($couponsOptions == 'yes') : ?>
+											<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
+													<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
+														<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
+														<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
+													</g>
+												</svg>
+												<?php esc_html_e('Coupons option enabled', 'listeo_core');  ?>
+											</li>
+										<?php endif; ?>
 
-									<?php
-									$galleryOptions = $product->has_listing_gallery();
-									if ($galleryOptions == 'yes') : ?>
-										<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
-												<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
-													<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
-													<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
-												</g>
-											</svg>
-											<?php esc_html_e('Gallery Module enabled', 'listeo_core');  ?>
-										</li>
+										<?php
+										$galleryOptions = $product->has_listing_gallery();
+										if ($galleryOptions == 'yes') : ?>
+											<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
+													<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
+														<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
+														<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
+													</g>
+												</svg>
+												<?php esc_html_e('Gallery Module enabled', 'listeo_core');  ?>
+											</li>
+										<?php endif; ?>
+										<?php
+										$gallery_limitOptions = $product->get_option_gallery_limit();
+										if ($gallery_limitOptions) : ?>
+											<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
+													<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
+														<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
+														<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
+													</g>
+												</svg>
+												<?php printf(esc_html__('Maximum  %s images in gallery', 'listeo_core'), $product->get_option_gallery_limit());  ?>
+											</li>
+										<?php endif; ?>
 									<?php endif; ?>
 									<?php
-									$gallery_limitOptions = $product->get_option_gallery_limit();
-									if ($gallery_limitOptions) : ?>
-										<li><svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
-												<g id="Group_33" data-name="Group 33" transform="translate(-1122 -2972.25)">
-													<circle id="Ellipse_4" data-name="Ellipse 4" cx="21" cy="21" r="21" transform="translate(1122 2972.25)" fill="rgba(248,0,68,0.11)" />
-													<path id="Vector" d="M6,12.655l4.9,4.9,9.795-9.8" transform="translate(1129.5 2979.993)" fill="none" stroke="#f80044" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" />
-												</g>
-											</svg>
-											<?php printf(esc_html__('Maximum  %s images in gallery', 'listeo_core'), $product->get_option_gallery_limit());  ?>
-										</li>
-									<?php endif; ?>
+									// Add simple product to packages
+									?>
 								<?php endif; ?>
+								<?php
+								// Add simple product to packages
+								?>
+
 							</ul>
 							<?php
 
