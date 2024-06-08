@@ -5,7 +5,7 @@ on:
       # Pushing to any of the following
       # branches will trigger our workflow
       - main
-      - preview
+      - staging
     paths-ignore:
       # When all the path names match patterns in `paths-ignore`
       # the workflow will not run. We don't want to do anything
@@ -75,8 +75,8 @@ jobs:
           echo "SFTP_PASS=${{ secrets.SFTP_PROD_PASS }}" >> $GITHUB_ENV
           echo "DEPLOY_PATH=/iclub-www/wp-content/themes/listeo-child" >> $GITHUB_ENV
 
-      - name: Set environment variables (preview)
-        if: github.ref == 'refs/heads/preview'
+      - name: Set environment variables (staging)
+        if: github.ref == 'refs/heads/staging'
         run: |
           echo "SFTP_USER=${{ secrets.SFTP_STAG_USER }}" >> $GITHUB_ENV
           echo "SFTP_PASS=${{ secrets.SFTP_STAG_PASS }}" >> $GITHUB_ENV
