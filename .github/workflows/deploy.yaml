@@ -80,7 +80,7 @@ jobs:
         run: |
           echo "SFTP_USER=${{ secrets.SFTP_STAG_USER }}" >> $GITHUB_ENV
           echo "SFTP_PASS=${{ secrets.SFTP_STAG_PASS }}" >> $GITHUB_ENV
-          echo "DEPLOY_PATH=/iclub-www/wp-content/themes/listeo-child" >> $GITHUB_ENV
+          echo "DEPLOY_PATH=/iclub-dev-www//wp-content/themes/listeo-child" >> $GITHUB_ENV
 
       - name: Set outputs
         # Workaround to reference environment variables as inputs
