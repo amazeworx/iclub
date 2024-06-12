@@ -91,7 +91,6 @@ $max_num_pages = $data->ids->max_num_pages;
 
 						<div class="inner">
 							<h3><?php echo get_the_title( $listing ); //echo listeo_core_get_post_status($listing_id) ?></h3>
-							<span class="listing-address"><?php the_listing_address($listing); ?></span>
 							<span class="expiration-date"><?php esc_html_e('Expiring: ','listeo_core'); ?> <?php echo listeo_core_get_expiration_date($listing_id); ?></span>
 							
 							

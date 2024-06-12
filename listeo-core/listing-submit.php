@@ -72,7 +72,7 @@ if (isset($_POST['_listing_type'])) {
 	?>
 	<div class="elementor-alert-warning">
 		<div class="elementor-alert" role="alert">
-			Some of the information you provide will be visible to the public, some to free members, and some to premium members. To learn more about the visibility of your information, please visit <a href="/listing-visibility/">this page</a>.
+			Please see <a href="/how-to-submit-your-business-for-sale/">this article</a> if you need help with filling out this submission form.
 			<button type="button" class="elementor-alert-dismiss">
 				<span aria-hidden="true">×</span>
 				<span class="elementor-screen-only">Dismiss this alert.</span>
