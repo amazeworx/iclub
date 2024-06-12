@@ -1,7 +1,7 @@
-<div class="listing-added-notice">
-	<div class="booking-confirmation-page">
-		<i class="fa fa-check-circle"></i>
-		<h2 class="margin-top-30"><?php esc_html_e('Thanks for your submission!','listeo_core') ?></h2>
+<div class="dashboard-list-box">
+	<div class="pad-top30">
+		
+		<p>Submission received!</p>
 		<p><?php // Successful
 
 		switch ( get_post_status( $data->id ) ) {
@@ -13,7 +13,7 @@
 			break;			
 			case 'pending' :
 			case 'draft' :
-				esc_html_e( 'Your listing has been saved and is awaiting admin approval', 'listeo_core' );
+				esc_html_e( 'Your listing has been saved. Our verification team will review your submission as soon as possible. Depending on the information you provided and our backlog, it can take anywhere between 2 and 72 hours for your listing to go live. Sometimes it might take as long as 5 working days.', 'listeo_core' );
 			break;
 			default :
 				esc_html_e( 'Your changes have been saved.', 'listeo_core' );

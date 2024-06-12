@@ -1,7 +1,3 @@
-<div class="notification closeable notice">
-	<p><strong><?php esc_html_e('Notice!', 'listeo_core'); ?></strong> <?php esc_html_e("This is preview of listing you've submitted, please confirm or edit your submission using buttons at the end of that page.", 'listeo_core'); ?></p><a class="close" href="#"></a>
-</div>
-
 <div class="listing_preview_container">
 
 	<?php
