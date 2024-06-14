@@ -191,7 +191,7 @@ function listeo_registration_form_function()
 }
 add_shortcode('listeo_registration_form', 'listeo_registration_form_function');
 
-function listeo_login_form()
+function listeo_login_form_function()
 {
   global $post;
 ?>
