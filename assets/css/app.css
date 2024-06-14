@@ -142,12 +142,20 @@
   margin-top: 1rem
 }
 
+.tw-mb-0 {
+  margin-bottom: 0px
+}
+
 .tw-block {
   display: block
 }
 
 .tw-inline-block {
   display: inline-block
+}
+
+.\!tw-inline-block {
+  display: inline-block !important
 }
 
 .tw-flex {
@@ -172,6 +180,10 @@
 
 .tw-w-4 {
   width: 1rem
+}
+
+.tw-items-center {
+  align-items: center
 }
 
 .tw-justify-between {
@@ -229,6 +241,10 @@
 
 .\!tw-pl-11 {
   padding-left: 2.75rem !important
+}
+
+.tw-align-middle {
+  vertical-align: middle
 }
 
 .\!tw-text-base {
