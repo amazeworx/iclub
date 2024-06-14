@@ -193,19 +193,46 @@ add_action('login_form_register', 'iclub_redirect_to_custom_register', 5);
  * 
  * @return int|WP_Error The id of the user that was created, or error if failed. 
  */
-function iclub_register_user($email, $password, $first_name, $last_name, $buy_or_sell)
+function iclub_register_user($email, $password, $first_name, $last_name, $buy_or_sell, $role)
 {
   $errors = new WP_Error();
+
   // Email address is used as both username and email. It is also the only 
   // parameter we need to validate 
   if (!is_email($email)) {
     $errors->add('email', iclub_get_error_message('email'));
     return $errors;
   }
+  if (email_exists($email)) {
+    $errors->add('email_exists',  iclub_get_error_message('email_exists'));
+    return $errors;
+  }
   if (username_exists($email) || email_exists($email)) {
     $errors->add('email_exists',  iclub_get_error_message('email_exists'));
     return $errors;
   }
+
+  // Generate the password so that the subscriber will have to check email...
+  if (!$password) {
+    $password = wp_generate_password(12, false);
+  }
+  if (get_option('listeo_strong_password')) {
+    $uppercase = preg_match('@[A-Z]@', $password);
+    $lowercase = preg_match('@[a-z]@', $password);
+    $number    = preg_match('@[0-9]@', $password);
+    $specialChars = preg_match('@[^\w]@', $password);
+
+    if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
+
+      $errors->add('strong_password', iclub_get_error_message('strong_password'));
+      return $errors;
+    }
+  }
+
+  if (!in_array($role, array('owner', 'guest', 'seller'))) {
+    $role = get_option('default_role');
+  }
+
   // Generate the password so that the subscriber will have to check email... 
   //$password = wp_generate_password(12, false);
   $user_data = array(
@@ -214,11 +241,14 @@ function iclub_register_user($email, $password, $first_name, $last_name, $buy_or
     'user_pass'     => $password,
     'first_name'    => $first_name,
     'last_name'     => $last_name,
-    '_buy_or_sell_or_both'  => $buy_or_sell,
-    ''
+    'role'      => $role
   );
   $user_id = wp_insert_user($user_data);
+
+  update_user_meta($user_id, '_buy_or_sell_or_both', $buy_or_sell);
+
   wp_new_user_notification($user_id, $password);
+
   return $user_id;
 }
 
@@ -239,17 +269,50 @@ function iclub_do_register_user()
       $email = sanitize_email($_POST['email']);
       $first_name = sanitize_text_field($_POST['first_name']);
       $last_name = sanitize_text_field($_POST['last_name']);
-      $password = $_POST['password'];
+
+      $email = $_POST['email'];
+      $first_name = (isset($_POST['first_name'])) ? sanitize_text_field($_POST['first_name']) : '';
+      $last_name = (isset($_POST['last_name'])) ? sanitize_text_field($_POST['last_name']) : '';
+
+      $role =  (isset($_POST['user_role'])) ? sanitize_text_field($_POST['user_role']) : get_option('default_role');
+      if (!in_array($role, array('owner', 'guest', 'seller'))) {
+        $role = get_option('default_role');
+      }
+
+      $password = (!empty($_POST['password'])) ? sanitize_text_field($_POST['password']) : false;
+
       $buy_or_sell = sanitize_text_field($_POST['_buy_or_sell']);
-      $role = sanitize_text_field($_POST["role"]);
+
       $result = iclub_register_user($email, $password, $first_name, $last_name, $buy_or_sell, $role);
+
       if (is_wp_error($result)) {
         // Parse errors into a string and append as parameter to redirect 
         $errors = join(',', $result->get_error_codes());
         $redirect_url = add_query_arg('register-errors', $errors, $redirect_url);
       } else {
         // Success, redirect to login page. 
-        $redirect_url = home_url('login');
+        if ($role == 'owner' || $role == 'seller') {
+
+          $redirect_page_id = get_option('listeo_owner_registration_redirect');
+
+          if ($redirect_page_id) {
+
+            $redirect_url = get_permalink($redirect_page_id);
+          } else {
+
+            $redirect_url = get_permalink(get_option('listeo_profile_page'));
+          }
+        } else if ($role == 'guest') {
+
+          $redirect_page_id = get_option('listeo_guest_registration_redirect');
+          if ($redirect_page_id) {
+            $redirect_url = get_permalink($redirect_page_id);
+          } else {
+            $redirect_url = get_permalink(get_option('listeo_profile_page'));
+          }
+        } else {
+          $redirect_url = get_permalink(get_option('listeo_profile_page'));
+        }
         $redirect_url = add_query_arg('registered', $email, $redirect_url);
       }
     }
