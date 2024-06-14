@@ -44,6 +44,14 @@ add_shortcode('listeo_bookmark_button', 'listeo_bookmark_button_function');
 function listeo_registration_form_function()
 {
   global $post;
+  // Retrieve possible errors from request parameters 
+  $attributes['errors'] = array();
+  if (isset($_REQUEST['register-errors'])) {
+    $error_codes = explode(',', $_REQUEST['register-errors']);
+    foreach ($error_codes as $error_code) {
+      $attributes['errors'][] = get_error_message($error_code);
+    }
+  }
 ?>
   <div class="sign-in-form">
     <?php
@@ -53,6 +61,14 @@ function listeo_registration_form_function()
       </div>
     <?php else : ?>
       <form enctype="multipart/form-data" class="register listeo-registration-form" id="register" action="<?php echo wp_registration_url(); ?>" method="post">
+        <?php if (count($attributes['errors']) > 0) : ?>
+          <?php foreach ($attributes['errors'] as $error) : ?>
+            <p>
+              <?php echo $error; ?>
+            </p>
+          <?php endforeach; ?>
+        <?php endif; ?>
+
         <div class="listeo-register-form-fields-container">
           <?php
           $default_role = get_option('listeo_registration_form_default_role', 'guest');
@@ -191,13 +207,67 @@ function listeo_registration_form_function()
 }
 add_shortcode('listeo_registration_form', 'listeo_registration_form_function');
 
-function listeo_login_form_function()
+function listeo_login_form_function($attributes)
 {
   global $post;
+
+  // Error messages 
+  $errors = array();
+  if (isset($_REQUEST['login'])) {
+    $error_codes = explode(',', $_REQUEST['login']);
+    foreach ($error_codes as $code) {
+      $errors[] = get_error_message($code);
+    }
+  }
+  $attributes['errors'] = $errors;
+
+  // Check if user just logged out 
+  $attributes['logged_out'] = isset($_REQUEST['logged_out']) && $_REQUEST['logged_out'] == true;
+  // Check if the user just registered 
+  $attributes['registered'] = isset($_REQUEST['registered']);
+  // Check if the user just requested a new password 
+  $attributes['lost_password_sent'] = isset($_REQUEST['checkemail']) && $_REQUEST['checkemail'] == 'confirm';
+  // Check if user just updated password 
+  $attributes['password_updated'] = isset($_REQUEST['password']) && $_REQUEST['password'] == 'changed';
 ?>
   <div class="sign-in-form">
     <form method="post" id="login" class="login" action="<?php echo wp_login_url(); ?>">
       <?php do_action('listeo_before_login_form'); ?>
+      <!-- Show errors if there are any -->
+      <?php if (count($attributes['errors']) > 0) : ?>
+        <?php foreach ($attributes['errors'] as $error) : ?>
+          <p class="login-error">
+            <?php echo $error; ?>
+          </p>
+        <?php endforeach; ?>
+      <?php endif; ?>
+      <!-- Show logged out message if user just logged out -->
+      <?php if ($attributes['logged_out']) : ?>
+        <p class="login-info">
+          <?php _e('You have signed out. Would you like to sign in again?', 'personalize-login'); ?>
+        </p>
+      <?php endif; ?>
+      <?php if ($attributes['registered']) : ?>
+        <p class="login-info">
+          <?php
+          printf(
+            __('You have successfully registered to <strong>%s</strong>. We have emailed your password to the email address you entered.', 'personalize-login'),
+            get_bloginfo('name')
+          );
+          ?>
+        </p>
+      <?php endif; ?>
+      <?php if ($attributes['lost_password_sent']) : ?>
+        <p class="login-info">
+          <?php _e('Check your email for a link to reset your password.', 'iclub'); ?>
+        </p>
+      <?php endif; ?>
+      <?php if ($attributes['password_updated']) : ?>
+        <p class="login-info">
+          <?php _e('Your password has been changed. You can sign in now.', 'personalize-login'); ?>
+        </p>
+      <?php endif; ?>
+
       <p class="form-row form-row-wide">
         <label for="user_login">
           <i class="sl sl-icon-user"></i>
