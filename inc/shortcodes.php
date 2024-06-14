@@ -208,10 +208,9 @@ function listeo_login_form_function()
         <label for="user_pass">
           <i class="sl sl-icon-lock"></i>
           <input placeholder="<?php esc_attr_e('Password', 'listeo_core'); ?>" class="input-text" type="password" name="pwd" id="user_pass" />
-
         </label>
         <span class="lost_password">
-          <a href="<?php echo wp_lostpassword_url(); ?>"><?php esc_html_e('Lost Your Password?', 'listeo_core'); ?></a>
+          <a href="<?php echo site_url('/lost-password'); ?>"><?php esc_html_e('Lost Your Password?', 'listeo_core'); ?></a>
         </span>
       </p>
       <div class="form-row">
@@ -220,7 +219,6 @@ function listeo_login_form_function()
         <div class="checkboxes margin-top-10">
           <input name="rememberme" type="checkbox" id="remember-me" value="forever" />
           <label for="remember-me"><?php esc_html_e('Remember Me', 'listeo_core'); ?></label>
-
         </div>
       </div>
       <div class="notification error closeable" style="display: none; margin-top: 20px; margin-bottom: 0px;">
