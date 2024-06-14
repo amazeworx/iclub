@@ -2,14 +2,6 @@
   <?php if ($attributes['show_title']) : ?>
     <h3><?php _e('Forgot Your Password?', 'personalize-login'); ?></h3>
   <?php endif; ?>
-  <p>
-    <?php
-    _e(
-      "Enter your email address and we'll send you a link you can use to pick a new password.",
-      'personalize_login'
-    );
-    ?>
-  </p>
   <?php if (count($attributes['errors']) > 0) : ?>
     <?php foreach ($attributes['errors'] as $error) : ?>
       <div class="login-error tw-mb-8 tw-py-4 tw-px-6 tw-rounded-md tw-bg-red-100 tw-border-red-300 tw-text-red-500">

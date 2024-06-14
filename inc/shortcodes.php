@@ -543,7 +543,7 @@ function iclub_render_password_reset_form($attributes, $content = null)
   if (!is_admin() && is_user_logged_in()) {
     return __('You are already signed in.', 'personalize-login');
   } else {
-    if (isset($_REQUEST['login']) && isset($_REQUEST['key'])) {
+    if (!is_admin() && isset($_REQUEST['login']) && isset($_REQUEST['key'])) {
       $attributes['login'] = $_REQUEST['login'];
       $attributes['key'] = $_REQUEST['key'];
       // Error messages 
