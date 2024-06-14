@@ -33,7 +33,7 @@ function listeo_bookmark_button_function()
               data-post_id="' . esc_attr($post->ID) . '" 
               data-nonce="' . esc_attr($nonce) . '"></span>';
     } else {
-      $output .= '<span class="save like-icon tooltip left"  title="' . esc_html_e('Login To Bookmark Items', 'listeo_core') . '"></span>';
+      // $output .= '<span class="save like-icon tooltip left"  title="' . esc_html_e('Login To Bookmark Items', 'listeo_core') . '"></span>';
     }
   }
 
