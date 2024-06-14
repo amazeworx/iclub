@@ -299,3 +299,266 @@ function listeo_login_form_function($attributes)
 <?php
 }
 add_shortcode('listeo_login_form', 'listeo_login_form_function');
+
+function iclub_login_form_function($attributes)
+{
+  global $post;
+
+  // Error messages 
+  $errors = array();
+  if (isset($_REQUEST['login'])) {
+    $error_codes = explode(',', $_REQUEST['login']);
+    foreach ($error_codes as $code) {
+      $errors[] = get_error_message($code);
+    }
+  }
+  $attributes['errors'] = $errors;
+
+  // Check if user just logged out 
+  $attributes['logged_out'] = isset($_REQUEST['logged_out']) && $_REQUEST['logged_out'] == true;
+  // Check if the user just registered 
+  $attributes['registered'] = isset($_REQUEST['registered']);
+  // Check if the user just requested a new password 
+  $attributes['lost_password_sent'] = isset($_REQUEST['checkemail']) && $_REQUEST['checkemail'] == 'confirm';
+  // Check if user just updated password 
+  $attributes['password_updated'] = isset($_REQUEST['password']) && $_REQUEST['password'] == 'changed';
+?>
+  <div class="sign-in-form">
+    <form method="post" id="login" class="login" action="<?php echo wp_login_url(); ?>">
+      <?php do_action('listeo_before_login_form'); ?>
+      <!-- Show errors if there are any -->
+      <?php if (count($attributes['errors']) > 0) : ?>
+        <?php foreach ($attributes['errors'] as $error) : ?>
+          <p class="login-error">
+            <?php echo $error; ?>
+          </p>
+        <?php endforeach; ?>
+      <?php endif; ?>
+      <!-- Show logged out message if user just logged out -->
+      <?php if ($attributes['logged_out']) : ?>
+        <p class="login-info">
+          <?php _e('You have signed out. Would you like to sign in again?', 'personalize-login'); ?>
+        </p>
+      <?php endif; ?>
+      <?php if ($attributes['registered']) : ?>
+        <p class="login-info">
+          <?php
+          printf(
+            __('You have successfully registered to <strong>%s</strong>. We have emailed your password to the email address you entered.', 'personalize-login'),
+            get_bloginfo('name')
+          );
+          ?>
+        </p>
+      <?php endif; ?>
+      <?php if ($attributes['lost_password_sent']) : ?>
+        <p class="login-info">
+          <?php _e('Check your email for a link to reset your password.', 'iclub'); ?>
+        </p>
+      <?php endif; ?>
+      <?php if ($attributes['password_updated']) : ?>
+        <p class="login-info">
+          <?php _e('Your password has been changed. You can sign in now.', 'personalize-login'); ?>
+        </p>
+      <?php endif; ?>
+
+      <p class="form-row form-row-wide">
+        <label for="user_login">
+          <i class="sl sl-icon-user"></i>
+          <input placeholder="<?php esc_attr_e('Username/Email', 'listeo_core'); ?>" type="text" class="input-text" name="log" id="user_login" value="" />
+        </label>
+      </p>
+      <p class="form-row form-row-wide">
+        <label for="user_pass">
+          <i class="sl sl-icon-lock"></i>
+          <input placeholder="<?php esc_attr_e('Password', 'listeo_core'); ?>" class="input-text" type="password" name="pwd" id="user_pass" />
+        </label>
+        <span class="lost_password">
+          <a href="<?php echo site_url('/lost-password'); ?>"><?php esc_html_e('Lost Your Password?', 'listeo_core'); ?></a>
+        </span>
+      </p>
+      <div class="form-row">
+        <?php wp_nonce_field('listeo-ajax-login-nonce', 'login_security'); ?>
+        <input type="submit" class="button border margin-top-5" name="login" value="<?php esc_html_e('Login', 'listeo_core') ?>" />
+        <div class="checkboxes margin-top-10">
+          <input name="rememberme" type="checkbox" id="remember-me" value="forever" />
+          <label for="remember-me"><?php esc_html_e('Remember Me', 'listeo_core'); ?></label>
+        </div>
+      </div>
+      <div class="notification error closeable" style="display: none; margin-top: 20px; margin-bottom: 0px;">
+        <p></p>
+      </div>
+    </form>
+  </div>
+<?php
+}
+//add_shortcode('iclub_login_form', 'iclub_login_form_function');
+
+/** 
+ * A shortcode for rendering the login form. 
+ * 
+ * @param array $attributes Shortcode attributes. 
+ * @param string $content The text content for shortcode. Not used. 
+ * 
+ * @return string The shortcode output 
+ */
+function iclub_render_login_form($attributes, $content = null)
+{
+  // Parse shortcode attributes 
+  $default_attributes = array('show_title' => false);
+  $attributes = shortcode_atts($default_attributes, $attributes);
+  $show_title = $attributes['show_title'];
+
+  // Error messages 
+  $errors = array();
+  if (isset($_REQUEST['login'])) {
+    $error_codes = explode(',', $_REQUEST['login']);
+    foreach ($error_codes as $code) {
+      $errors[] = get_error_message($code);
+    }
+  }
+  $attributes['errors'] = $errors;
+
+  // Check if user just logged out 
+  $attributes['logged_out'] = isset($_REQUEST['logged_out']) && $_REQUEST['logged_out'] == true;
+
+  // Check if the user just requested a new password 
+  $attributes['lost_password_sent'] = isset($_REQUEST['checkemail']) && $_REQUEST['checkemail'] == 'confirm';
+
+  // Check if user just updated password 
+  $attributes['password_updated'] = isset($_REQUEST['password']) && $_REQUEST['password'] == 'changed';
+
+  if (!is_admin()) {
+    if (is_user_logged_in()) {
+      return __('You are already signed in.', 'personalize-login');
+    }
+  }
+
+  // Pass the redirect parameter to the WordPress login functionality: by default, 
+  // don't specify a redirect, but if a valid redirect URL has been passed as 
+  // request parameter, use it. 
+  $attributes['redirect'] = '';
+  if (isset($_REQUEST['redirect_to'])) {
+    $attributes['redirect'] = wp_validate_redirect($_REQUEST['redirect_to'], $attributes['redirect']);
+  }
+
+  // Render the login form using an external template 
+  return iclub_get_template_html('login_form', $attributes);
+}
+add_shortcode('iclub_login_form', 'iclub_render_login_form');
+
+/** 
+ * A shortcode for rendering the new user registration form. 
+ * 
+ * @param array $attributes Shortcode attributes. 
+ * @param string $content The text content for shortcode. Not used. 
+ * 
+ * @return string The shortcode output 
+ */
+function iclub_render_register_form($attributes, $content = null)
+{
+  // Parse shortcode attributes 
+  $default_attributes = array('show_title' => false);
+  $attributes = shortcode_atts($default_attributes, $attributes);
+
+  if (is_admin()) {
+    return iclub_get_template_html('register_form', $attributes);
+  } else {
+    if (is_user_logged_in()) {
+      return __('You are already signed in.', 'personalize-login');
+    } elseif (!get_option('users_can_register')) {
+      return __('Registering new users is currently not allowed.', 'personalize-login');
+    } else {
+      return iclub_get_template_html('register_form', $attributes);
+    }
+  }
+}
+add_shortcode('iclub_register_form', 'iclub_render_register_form');
+
+/** 
+ * Renders the contents of the given template to a string and returns it. 
+ * 
+ * @param string $template_name The name of the template to render (without .php) 
+ * @param array $attributes The PHP variables for the template 
+ * 
+ * @return string The contents of the template. 
+ */
+function iclub_get_template_html($template_name, $attributes = null)
+{
+  if (!$attributes) {
+    $attributes = array();
+  }
+  ob_start();
+  //do_action( 'personalize_login_before_' . $template_name );
+  require('templates/' . $template_name . '.php');
+  //do_action( 'personalize_login_after_' . $template_name );
+  $html = ob_get_contents();
+  ob_end_clean();
+  return $html;
+}
+
+/** 
+ * A shortcode for rendering the form used to initiate the password reset. 
+ * 
+ * @param array $attributes Shortcode attributes. 
+ * @param string $content The text content for shortcode. Not used. 
+ * 
+ * @return string The shortcode output 
+ */
+function iclub_render_password_lost_form($attributes, $content = null)
+{
+  // Parse shortcode attributes 
+  $default_attributes = array('show_title' => false);
+  $attributes = shortcode_atts($default_attributes, $attributes);
+
+  // Retrieve possible errors from request parameters 
+  $attributes['errors'] = array();
+  if (isset($_REQUEST['errors'])) {
+    $error_codes = explode(',', $_REQUEST['errors']);
+    foreach ($error_codes as $error_code) {
+      $attributes['errors'][] = iclub_get_error_message($error_code);
+    }
+  }
+
+  if (!is_admin() && is_user_logged_in()) {
+    return __('You are already signed in.', 'personalize-login');
+  } else {
+    return iclub_get_template_html('password_lost_form', $attributes);
+  }
+}
+add_shortcode('iclub_lost_password', 'iclub_render_password_lost_form');
+
+/** 
+ * A shortcode for rendering the form used to reset a user's password. 
+ * 
+ * @param array $attributes Shortcode attributes. 
+ * @param string $content The text content for shortcode. Not used. 
+ * 
+ * @return string The shortcode output 
+ */
+function iclub_render_password_reset_form($attributes, $content = null)
+{
+  // Parse shortcode attributes 
+  $default_attributes = array('show_title' => false);
+  $attributes = shortcode_atts($default_attributes, $attributes);
+  if (!is_admin() && is_user_logged_in()) {
+    return __('You are already signed in.', 'personalize-login');
+  } else {
+    if (isset($_REQUEST['login']) && isset($_REQUEST['key'])) {
+      $attributes['login'] = $_REQUEST['login'];
+      $attributes['key'] = $_REQUEST['key'];
+      // Error messages 
+      $errors = array();
+      if (isset($_REQUEST['error'])) {
+        $error_codes = explode(',', $_REQUEST['error']);
+        foreach ($error_codes as $code) {
+          $errors[] = iclub_get_error_message($code);
+        }
+      }
+      $attributes['errors'] = $errors;
+      return iclub_get_template_html('password_reset_form', $attributes);
+    } else {
+      return __('Invalid password reset link.', 'personalize-login');
+    }
+  }
+}
+add_shortcode('iclub_reset_password', 'iclub_render_password_reset_form');

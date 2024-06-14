@@ -279,8 +279,7 @@ function iclub_retrieve_password_message($message, $key, $user_login)
 
 add_filter('retrieve_password_message', 'iclub_retrieve_password_message', 20, 3);
 
-add_action('login_form_rp', array($this, 'redirect_to_custom_password_reset'));
-add_action('login_form_resetpass', array($this, 'redirect_to_custom_password_reset'));
+
 
 /** 
  * Redirects to the custom password reset page, or the login page 
@@ -306,3 +305,5 @@ function redirect_to_custom_password_reset()
     exit;
   }
 }
+add_action('login_form_rp', array($this, 'redirect_to_custom_password_reset'));
+add_action('login_form_resetpass', array($this, 'redirect_to_custom_password_reset'));
