@@ -250,8 +250,12 @@ function iclub_register_user($email, $password, $first_name, $last_name, $buy_or
     'user_pass'     => $password,
     'first_name'    => $first_name,
     'last_name'     => $last_name,
-    'role'          => $role
+    'role'          => $role,
+    '_buy_or_sell_or_both' => $buy_or_sell
   );
+
+  //exit(print_r($user_data));
+
   $user_id = wp_insert_user($user_data);
 
   update_user_meta($user_id, '_buy_or_sell_or_both', $buy_or_sell);
@@ -289,7 +293,9 @@ function iclub_do_register_user()
 
       $password = (!empty($_POST['password'])) ? sanitize_text_field($_POST['password']) : false;
 
-      $buy_or_sell = sanitize_text_field($_POST['_buy_or_sell']);
+      $buy_or_sell = sanitize_text_field($_POST['_buy_or_sell_or_both']);
+
+      //exit($buy_or_sell);
 
       $result = iclub_register_user($email, $password, $first_name, $last_name, $buy_or_sell, $role);
 

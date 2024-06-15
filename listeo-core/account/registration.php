@@ -142,12 +142,11 @@
 
         <!-- //extra fields -->
         <div id="listeo-core-registration-fields">
-          <?php echo listeo_get_extra_registration_fields($default_role); ?>
+          <?php echo listeo_get_extra_registration_fields('owner'); ?>
         </div>
 
 
         <!-- eof custom fields -->
-
         <?php if (!get_option('listeo_display_password_field')) : ?>
           <p class="form-row form-row-wide margin-top-30 margin-bottom-30"><?php esc_html_e('Note: Your password will be generated automatically and sent to your email address.', 'listeo_core'); ?>
           </p>
@@ -191,46 +190,11 @@
           </p>
         <?php } ?>
       </div>
-      <?php if (get_option('listeo_otp_status')) { ?>
-        <div class="otp_registration-wrapper" style="display: none">
-          <?php do_action('listeo_before_otp_form'); ?>
-          <div class="otp_registration">
-            <h4><?php esc_html_e('Verification Code', 'listeo_core'); ?></h4>
-
-            <p class="form-row margin-top-10 otp_code margin-bottom-10">
-              <?php esc_html_e('Please enter the 4 digit code sent to your mobile number.', 'listeo_core'); ?>
-              <span class="otp-countdown-valid-text"><?php esc_html_e('The code is valid for', 'listeo_core'); ?> </span> <span class="otp-countdown"></span>
-              <a id="resend_otp" class="hidden" href=" #"><?php esc_html_e('Time has passed, click here to resend code', 'listeo_core'); ?></a>
-            </p>
-
-
-
-            <div id="listeo_otp-inputs">
-              <input type=" tel" name="listeo_otp[token][code_1]" required="required" class="field__token" autocomplete="off" data-error="error_second_step_authentication_token" data-input-type="user">
-              <input type="tel" name="listeo_otp[token][code_2]" required="required" class="field__token" autocomplete="off" data-error="error_second_step_authentication_token" data-input-type="user">
-              <input type="tel" name="listeo_otp[token][code_3]" required="required" class="field__token" autocomplete="off" data-error="error_second_step_authentication_token" data-input-type="user">
-              <input type="tel" name="listeo_otp[token][code_4]" required="required" class="field__token" autocomplete="off" data-error="error_second_step_authentication_token" data-input-type="user">
-
-            </div>
-
-            <span id="error_listeo_otp" class="hidden"><?php esc_html_e('Wrong authorization code. Try again later.', 'listeo_core'); ?></span>
-            <span id="error_listeo_otp_time" class="hidden"><?php esc_html_e('The code has expired. Try again later.', 'listeo_core'); ?></span>
-            <span id="error_listeo_otp_general" class="hidden"><?php esc_html_e('Something went wrong. Try again later.', 'listeo_core'); ?></span>
-
-
-          </div>
-          <input type="submit" class="button border fw margin-top-10" name="register" value="<?php esc_html_e('Register', 'listeo_core'); ?>" />
-          <?php do_action('listeo_after_otp_form'); ?>
-        </div>
-      <?php } ?>
 
       <?php wp_nonce_field('listeo-ajax-login-nonce', 'register_security'); ?>
 
-      <?php if (get_option('listeo_otp_status')) { ?>
-        <a class="button fw margin-top-10" id="otp_submit" name="otp"><?php esc_html_e('Register', 'listeo_core'); ?></a>
-      <?php } else { ?>
-        <input type="submit" class="button border fw margin-top-10" name="register" value="<?php esc_html_e('Register', 'listeo_core'); ?>" />
-      <?php } ?>
+      <input type="submit" class="button border fw margin-top-10" name="register" value="<?php esc_html_e('Register', 'listeo_core'); ?>" />
+
       <div class="notification error closeable" style="display: none;margin-top: 20px; margin-bottom: 0px;">
         <p></p>
       </div>
@@ -242,19 +206,5 @@
       <?php echo listeo_get_extra_registration_fields('guest'); ?>
     </div>
   <?php endif; ?>
-
-  <?php if (function_exists('_wsl_e')) { ?>
-    <div class="social-login-separator"><span><?php esc_html_e('Sign In with Social Network', 'listeo_core'); ?></span></div>
-    <?php do_action('wordpress_social_login'); ?>
-
-  <?php } ?>
-
-  <?php
-  if (function_exists('mo_openid_initialize_social_login')) { ?>
-    <div class="social-miniorange-container">
-      <div class="social-login-separator"><span><?php esc_html_e('Sign In with Social Network', 'listeo_core'); ?></span></div><?php echo do_shortcode('[miniorange_social_login  view="horizontal" heading=""]');
-                                                                                                                                ?>
-    </div>
-  <?php } ?>
 
 </div>
