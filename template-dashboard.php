@@ -14,7 +14,7 @@
 if (!is_user_logged_in()) {
 
 	// Redirect to Login page
-	wp_redirect(home_url('login'));
+	//wp_redirect(home_url('login'));
 
 	$errors = array();
 
