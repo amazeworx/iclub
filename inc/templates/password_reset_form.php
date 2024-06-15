@@ -22,7 +22,7 @@
       <input type="password" name="pass2" id="pass2" class="input" size="20" value="" autocomplete="off" />
     </p>
 
-    <p class="description"><?php echo wp_get_password_hint(); ?></p>
+    <!-- <p class="description"><?php echo wp_get_password_hint(); ?></p> -->
 
     <p class="resetpass-submit">
       <input type="submit" name="submit" id="resetpass-button" class="button" value="<?php _e('Reset Password', 'personalize-login'); ?>" />

@@ -239,6 +239,11 @@
   padding-bottom: 1rem
 }
 
+.tw-py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem
+}
+
 .\!tw-pl-11 {
   padding-left: 2.75rem !important
 }
@@ -255,6 +260,15 @@
 .tw-text-base {
   font-size: 1rem;
   line-height: 1.5rem
+}
+
+.tw-text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem
+}
+
+.tw-text-\[15px\] {
+  font-size: 15px
 }
 
 .\!tw-leading-normal {
@@ -278,6 +292,16 @@
 .tw-text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity))
+}
+
+.tw-text-amber-600 {
+  --tw-text-opacity: 1;
+  color: rgb(217 119 6 / var(--tw-text-opacity))
+}
+
+.tw-text-amber-700 {
+  --tw-text-opacity: 1;
+  color: rgb(180 83 9 / var(--tw-text-opacity))
 }
 
 .tw-shadow-none {

@@ -5,7 +5,7 @@
   if (isset($_REQUEST['register-errors'])) {
     $error_codes = explode(',', $_REQUEST['register-errors']);
     foreach ($error_codes as $error_code) {
-      $attributes['errors'][] = get_error_message($error_code);
+      $attributes['errors'][] = iclub_get_error_message($error_code);
     }
   }
 

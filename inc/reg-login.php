@@ -203,10 +203,10 @@ function iclub_register_user($email, $password, $first_name, $last_name, $buy_or
     $errors->add('email', iclub_get_error_message('email'));
     return $errors;
   }
-  if (email_exists($email)) {
-    $errors->add('email_exists',  iclub_get_error_message('email_exists'));
-    return $errors;
-  }
+  // if (email_exists($email)) {
+  //   $errors->add('email_exists',  iclub_get_error_message('email_exists'));
+  //   return $errors;
+  // }
   if (username_exists($email) || email_exists($email)) {
     $errors->add('email_exists',  iclub_get_error_message('email_exists'));
     return $errors;
@@ -241,7 +241,7 @@ function iclub_register_user($email, $password, $first_name, $last_name, $buy_or
     'user_pass'     => $password,
     'first_name'    => $first_name,
     'last_name'     => $last_name,
-    'role'      => $role
+    'role'          => $role
   );
   $user_id = wp_insert_user($user_data);
 
@@ -269,7 +269,6 @@ function iclub_do_register_user()
       $email = sanitize_email($_POST['email']);
       $first_name = sanitize_text_field($_POST['first_name']);
       $last_name = sanitize_text_field($_POST['last_name']);
-
       $email = $_POST['email'];
       $first_name = (isset($_POST['first_name'])) ? sanitize_text_field($_POST['first_name']) : '';
       $last_name = (isset($_POST['last_name'])) ? sanitize_text_field($_POST['last_name']) : '';
@@ -291,19 +290,18 @@ function iclub_do_register_user()
         $redirect_url = add_query_arg('register-errors', $errors, $redirect_url);
       } else {
         // Success, redirect to login page. 
+        wp_set_current_user($result);
+        wp_set_auth_cookie($result);
         if ($role == 'owner' || $role == 'seller') {
 
           $redirect_page_id = get_option('listeo_owner_registration_redirect');
 
           if ($redirect_page_id) {
-
             $redirect_url = get_permalink($redirect_page_id);
           } else {
-
             $redirect_url = get_permalink(get_option('listeo_profile_page'));
           }
         } else if ($role == 'guest') {
-
           $redirect_page_id = get_option('listeo_guest_registration_redirect');
           if ($redirect_page_id) {
             $redirect_url = get_permalink($redirect_page_id);
@@ -322,6 +320,15 @@ function iclub_do_register_user()
 }
 remove_action('login_form_register', 'do_register_user');
 add_action('login_form_register', 'iclub_do_register_user', 5);
+
+function iclub_auto_login_new_user($user_id)
+{
+  wp_set_current_user($user_id);
+  wp_set_auth_cookie($user_id);
+  wp_redirect(home_url('dashboard'));
+  exit();
+}
+//add_action('user_register', 'iclub_auto_login_new_user');
 
 /** 
  * Redirects the user to the custom "Forgot your password?" page instead of 
@@ -380,7 +387,8 @@ function iclub_replace_retrieve_password_message($message, $key, $user_login, $u
   $msg .= sprintf(__('You asked us to reset your password for your account using the email address %s.', 'personalize-login'), $user_login) . "\r\n\r\n";
   $msg .= __("If this was a mistake, or you didn't ask for a password reset, just ignore this email and nothing will happen.", 'personalize-login') . "\r\n\r\n";
   $msg .= __('To reset your password, visit the following address:', 'personalize-login') . "\r\n\r\n";
-  $msg .= site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user_login), 'login') . "\r\n\r\n";
+  //$msg .= site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user_login), 'login') . "\r\n\r\n";
+  $msg .= site_url("reset-password/?key=$key&login=" . rawurlencode($user_login), 'login') . "\r\n\r\n";
   $msg .= __('Thanks!', 'personalize-login') . "\r\n";
   return $msg;
 }
