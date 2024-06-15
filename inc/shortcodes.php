@@ -49,7 +49,7 @@ function listeo_registration_form_function()
   if (isset($_REQUEST['register-errors'])) {
     $error_codes = explode(',', $_REQUEST['register-errors']);
     foreach ($error_codes as $error_code) {
-      $attributes['errors'][] = get_error_message($error_code);
+      $attributes['errors'][] = iclub_get_error_message($error_code);
     }
   }
 ?>
@@ -216,7 +216,7 @@ function listeo_login_form_function($attributes)
   if (isset($_REQUEST['login'])) {
     $error_codes = explode(',', $_REQUEST['login']);
     foreach ($error_codes as $code) {
-      $errors[] = get_error_message($code);
+      $errors[] = iclub_get_error_message($code);
     }
   }
   $attributes['errors'] = $errors;
@@ -309,7 +309,7 @@ function iclub_login_form_function($attributes)
   if (isset($_REQUEST['login'])) {
     $error_codes = explode(',', $_REQUEST['login']);
     foreach ($error_codes as $code) {
-      $errors[] = get_error_message($code);
+      $errors[] = iclub_get_error_message($code);
     }
   }
   $attributes['errors'] = $errors;
@@ -413,7 +413,7 @@ function iclub_render_login_form($attributes, $content = null)
   if (isset($_REQUEST['login'])) {
     $error_codes = explode(',', $_REQUEST['login']);
     foreach ($error_codes as $code) {
-      $errors[] = get_error_message($code);
+      $errors[] = iclub_get_error_message($code);
     }
   }
   $attributes['errors'] = $errors;

@@ -1,5 +1,13 @@
 <?php
 
+function remove_listeo_core_filters()
+{
+  remove_action('login_form_login', 'redirect_to_custom_login');
+  remove_filter('login_redirect', 'redirect_after_login', 10, 3);
+  remove_filter('authenticate', 'maybe_redirect_at_authenticate', 101, 3);
+}
+//add_action('init', 'remove_listeo_core_filters');
+
 /** 
  * Redirects the user to the correct page depending on whether he / she 
  * is an admin or not. 
@@ -56,6 +64,7 @@ function iclub_maybe_redirect_at_authenticate($user, $username, $password)
 {
   // Check if the earlier authenticate filter (most likely, 
   // the default WordPress authentication) functions have found errors 
+  //die(print_r($user, true));
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (is_wp_error($user)) {
       $error_codes = join(',', $user->get_error_codes());
@@ -67,8 +76,8 @@ function iclub_maybe_redirect_at_authenticate($user, $username, $password)
   }
   return $user;
 }
-remove_filter('authenticate', 'maybe_redirect_at_authenticate', 101, 3);
-add_filter('authenticate', 'iclub_maybe_redirect_at_authenticate', 101, 3);
+//remove_filter('authenticate', 'maybe_redirect_at_authenticate', 101, 3);
+add_filter('authenticate', 'iclub_maybe_redirect_at_authenticate', 100, 3);
 
 
 /** 
@@ -165,7 +174,7 @@ function iclub_redirect_after_login($redirect_to, $requested_redirect_to, $user)
   return wp_validate_redirect($redirect_url, home_url());
 }
 remove_filter('login_redirect', 'redirect_after_login', 10, 3);
-add_filter('login_redirect', 'iclub_redirect_after_login', 10, 3);
+add_filter('login_redirect', 'iclub_redirect_after_login', 5, 3);
 
 /** 
  * Redirects the user to the custom registration page instead 
@@ -367,7 +376,7 @@ function iclub_do_password_lost()
     exit;
   }
 }
-add_action('login_form_lostpassword', 'iclub_do_password_lost');
+add_action('login_form_lostpassword', 'iclub_do_password_lost', 5);
 
 /** 
  * Returns the message body for the password reset mail. 
@@ -392,7 +401,7 @@ function iclub_replace_retrieve_password_message($message, $key, $user_login, $u
   $msg .= __('Thanks!', 'personalize-login') . "\r\n";
   return $msg;
 }
-add_filter('retrieve_password_message', 'iclub_replace_retrieve_password_message', 10, 4);
+add_filter('retrieve_password_message', 'iclub_replace_retrieve_password_message', 5, 4);
 
 
 /** 
@@ -419,8 +428,8 @@ function iclub_redirect_to_custom_password_reset()
     exit;
   }
 }
-add_action('login_form_rp', 'iclub_redirect_to_custom_password_reset');
-add_action('login_form_resetpass', 'iclub_redirect_to_custom_password_reset');
+add_action('login_form_rp', 'iclub_redirect_to_custom_password_reset', 5);
+add_action('login_form_resetpass', 'iclub_redirect_to_custom_password_reset', 5);
 
 /** 
  * Resets the user's password if the password reset form was submitted. 
@@ -467,5 +476,5 @@ function iclub_do_password_reset()
     exit;
   }
 }
-add_action('login_form_rp', 'iclub_do_password_reset');
-add_action('login_form_resetpass', 'iclub_do_password_reset');
+add_action('login_form_rp', 'iclub_do_password_reset', 5);
+add_action('login_form_resetpass', 'iclub_do_password_reset', 5);
