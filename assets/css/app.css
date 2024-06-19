@@ -464,4 +464,9 @@ body {
   .md\:tw-p-8 {
     padding: 2rem
   }
+
+  .md\:tw-text-base {
+    font-size: 1rem;
+    line-height: 1.5rem
+  }
 }

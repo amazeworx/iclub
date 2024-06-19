@@ -55,13 +55,12 @@
           <i class="sl sl-icon-lock tw-text-base tw-absolute tw-top-3 tw-left-4 tw-text-gray-400"></i>
           <input type="password" name="pwd" id="user_pass" placeholder="Password" class="!tw-pl-11 !tw-text-base !tw-leading-normal !tw-h-12">
         </label>
-
       </p>
       <div class="tw-flex tw-gap-x-2 tw-justify-between">
         <div class="login-remember">
-          <label class="tw-flex tw-gap-x-2 tw-items-center tw-align-middle tw-mb-0"><input name="rememberme" type="checkbox" id="rememberme" value="forever" class="!tw-inline-block tw-mb-0 tw-w-4 tw-h-4 tw-leading-normal tw-shadow-none"> Remember Me</label>
+          <label class="tw-flex tw-gap-x-2 tw-items-center tw-align-middle tw-mb-0 tw-text-sm md:tw-text-base"><input name="rememberme" type="checkbox" id="rememberme" value="forever" class="!tw-inline-block tw-mb-0 tw-w-4 tw-h-4 tw-leading-normal tw-shadow-none"> Remember Me</label>
         </div>
-        <a class="forgot-password" href="<?php echo wp_lostpassword_url(); ?>">
+        <a class="forgot-password tw-text-sm md:tw-text-base" href="<?php echo wp_lostpassword_url(); ?>">
           <?php _e('Forgot your password?', 'personalize-login'); ?>
         </a>
       </div>

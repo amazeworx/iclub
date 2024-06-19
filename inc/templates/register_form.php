@@ -69,6 +69,69 @@
       </p>
     <?php endif; ?>
 
+    <?php if (get_option('listeo_otp_status')) { ?>
+      <p class="form-row form-row-wide">
+        <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.3/build/js/intlTelInput.min.js"></script>
+        <script>
+          document.addEventListener('DOMContentLoaded', (event) => {
+            const input = document.querySelector("#phone");
+            const form = document.querySelector("#register");
+            const otpSubmitButton = document.querySelector("#otp_submit");
+            if (input) {
+              const iti = window.intlTelInput(input, {
+                initialCountry: "auto",
+                nationalMode: true,
+                hiddenInput: () => "full_phone",
+                geoIpLookup: callback => {
+                  fetch("https://ipapi.co/json")
+                    .then(res => res.json())
+                    .then(data => callback(data.country_code))
+                    .catch(() => callback("us"));
+                },
+                utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.3/build/js/utils.js" // just for formatting/placeholders etc
+              });
+              const fullPhoneInput = document.querySelector("input[name='full_phone']");
+              // check if the number is valid on focus out
+              input.addEventListener('blur', () => {
+
+                if (!iti.isValidNumber()) {
+                  // handle error
+                  input.classList.add("error");
+                } else {
+                  // if number is valid, submit the form
+                  input.classList.add("validphone");
+                  fullPhoneInput.value = iti.getNumber();
+                }
+              });
+              otpSubmitButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                if (!iti.isValidNumber()) {
+                  // handle error
+                  input.classList.add("error");
+
+                } else {
+                  // if number is valid, submit the form
+                  input.classList.add("validphone");
+                  fullPhoneInput.value = iti.getNumber();
+                }
+              });
+
+              input.addEventListener('input', () => {
+                if (input.classList.contains("error")) {
+                  input.classList.remove("error");
+                }
+              });
+            };
+            // listen to "keyup", but also "change" to update when the user selects a country
+          });
+        </script>
+        <label for="phone" class="tw-relative tw-block tw-m-0">
+          <i class="sl sl-icon-phone tw-text-base tw-absolute tw-top-3 tw-left-4 tw-text-gray-400"></i>
+          <input required type="tel" placeholder="<?php esc_html_e('Phone', 'listeo_core'); ?>" class="input-text !tw-pl-11 !tw-text-base !tw-leading-normal !tw-h-12" name="phone" id="phone" value="" />
+        </label>
+      </p>
+    <?php } ?>
+
     <!-- //extra fields -->
     <div id="listeo-core-registration-fields">
       <?php echo listeo_get_extra_registration_fields($default_role); ?>
