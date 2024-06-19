@@ -127,7 +127,7 @@
         </script>
         <label for="phone" class="tw-relative tw-block tw-m-0">
           <i class="sl sl-icon-phone tw-text-base tw-absolute tw-top-3 tw-left-4 tw-text-gray-400"></i>
-          <input required type="tel" placeholder="<?php esc_html_e('Phone', 'listeo_core'); ?>" class="input-text !tw-pl-11 !tw-text-base !tw-leading-normal !tw-h-12" name="phone" id="phone" value="" />
+          <input required type="tel" placeholder="<?php esc_html_e('Phone', 'listeo_core'); ?>" class="input-text !tw-pl-[65px] !tw-text-base !tw-leading-normal !tw-h-12" name="phone" id="phone" value="" />
         </label>
       </p>
     <?php } ?>
@@ -137,8 +137,61 @@
       <?php echo listeo_get_extra_registration_fields($default_role); ?>
     </div>
 
-    <p class="signup-submit">
-      <input type="submit" name="submit" class="register-button !tw-h-12 !tw-text-base !tw-px-10" value="<?php _e('Register', 'personalize-login'); ?>" />
-    </p>
-  </form>
+    <!-- eof custom fields -->
+    <?php if (!get_option('listeo_display_password_field')) : ?>
+      <p class="form-row form-row-wide margin-top-30 margin-bottom-30"><?php esc_html_e('Note: Your password will be generated automatically and sent to your email address.', 'listeo_core'); ?>
+      </p>
+    <?php endif; ?>
+
+    <?php $recaptcha = get_option('listeo_recaptcha');
+    $recaptcha_version = get_option('listeo_recaptcha_version', 'v2');
+    if ($recaptcha && $recaptcha_version == 'v2') { ?>
+
+      <p class="form-row captcha_wrapper">
+      <div class="g-recaptcha" data-sitekey="<?php echo get_option('listeo_recaptcha_sitekey'); ?>"></div>
+      </p>
+    <?php }
+
+    if ($recaptcha && $recaptcha_version == 'v3') { ?>
+      <input type="hidden" id="rc_action" name="rc_action" value="ws_register">
+      <input type="hidden" id="token" name="token">
+    <?php } ?>
+
+    <?php
+    $privacy_policy_status = get_option('listeo_privacy_policy');
+
+    if ($privacy_policy_status && function_exists('the_privacy_policy_link')) { ?>
+      <p class="form-row margin-top-10 checkboxes margin-bottom-10">
+        <input type="checkbox" id="privacy_policy" name="privacy_policy">
+        <label for="privacy_policy"><?php esc_html_e('I agree to the', 'listeo_core'); ?> <a target="_blank" href="<?php echo get_privacy_policy_url(); ?>"><?php esc_html_e('Privacy Policy', 'listeo_core'); ?></a> </label>
+
+      </p>
+
+    <?php } ?>
+
+    <?php
+    $terms_and_condition_status = get_option('listeo_terms_and_conditions_req');
+    $terms_and_condition_status_page = get_option('listeo_terms_and_conditions_page');
+
+    if ($terms_and_condition_status) { ?>
+      <p class="form-row margin-top-10 checkboxes margin-bottom-10">
+        <input type="checkbox" id="terms_and_conditions" name="terms_and_conditions">
+        <label for="terms_and_conditions"><?php esc_html_e('I agree to the', 'listeo_core'); ?> <a target="_blank" href="<?php echo get_permalink($terms_and_condition_status_page); ?>"><?php esc_html_e('Terms and Conditions', 'listeo_core'); ?></a> </label>
+
+      </p>
+    <?php } ?>
+</div>
+
+<?php wp_nonce_field('listeo-ajax-login-nonce', 'register_security'); ?>
+
+<p class="signup-submit">
+  <input type="submit" name="register" class="register-button !tw-h-12 !tw-text-base !tw-px-10" value="<?php _e('Register', 'personalize-login'); ?>" />
+</p>
+
+<div class="listeo-custom-fields-wrapper">
+  <?php echo listeo_get_extra_registration_fields('owner'); ?>
+  <?php echo listeo_get_extra_registration_fields('guest'); ?>
+</div>
+
+</form>
 </div>
