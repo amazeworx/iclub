@@ -472,7 +472,37 @@ function iclub_render_register_form($attributes, $content = null)
     }
   }
 }
-add_shortcode('iclub_register_form', 'iclub_render_register_form');
+//add_shortcode('iclub_register_form', 'iclub_render_register_form');
+
+/** 
+ * A shortcode for rendering the new user registration form. 
+ * 
+ * @param array $attributes Shortcode attributes. 
+ * @param string $content The text content for shortcode. Not used. 
+ * 
+ * @return string The shortcode output 
+ */
+function iclub_render_listeo_register_form($attributes, $content = null)
+{
+  return;
+  // Parse shortcode attributes 
+  $default_attributes = array('show_title' => false);
+  $attributes = shortcode_atts($default_attributes, $attributes);
+
+  if (is_admin()) {
+    return iclub_get_template_html('register_form', $attributes);
+  } else {
+    if (is_user_logged_in()) {
+      return __('You are already signed in.', 'personalize-login');
+    } elseif (!get_option('users_can_register')) {
+      return __('Registering new users is currently not allowed.', 'personalize-login');
+    } else {
+      return iclub_get_template_html('listeo_registration', $attributes);
+    }
+  }
+}
+add_shortcode('iclub_register_form', 'iclub_render_listeo_register_form');
+
 
 /** 
  * Renders the contents of the given template to a string and returns it. 

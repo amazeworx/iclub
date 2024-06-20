@@ -1,41 +1,12 @@
-<div id="register-form" class="widecolumn">
-  <?php
-  // Retrieve possible errors from request parameters 
-  $attributes['errors'] = array();
-  if (isset($_REQUEST['register-errors'])) {
-    $error_codes = explode(',', $_REQUEST['register-errors']);
-    foreach ($error_codes as $error_code) {
-      $attributes['errors'][] = iclub_get_error_message($error_code);
-    }
-  }
+<?php if (!get_option('users_can_register')) : ?>
 
-  // Check if the user just registered 
-  $attributes['registered'] = isset($_REQUEST['registered']);
+  <div class="notification error closeable" style="display: block">
+    <p><?php esc_html_e('Registration is disabled', 'listeo_core') ?></p>
+  </div>
 
-  if (count($attributes['errors']) > 0) : ?>
-    <?php foreach ($attributes['errors'] as $error) : ?>
-      <p>
-        <?php echo $error; ?>
-      </p>
-    <?php endforeach; ?>
-  <?php endif; ?>
+<?php else : ?>
 
-  <?php if ($attributes['registered']) : ?>
-    <p class="login-info">
-      <?php
-      printf(
-        __('You have successfully registered to <strong>%s</strong>. We have emailed your password to the email address you entered.', 'personalize-login'),
-        get_bloginfo('name')
-      );
-      ?>
-    </p>
-  <?php endif; ?>
-
-  <?php if ($attributes['show_title']) : ?>
-    <h3><?php _e('Register', 'personalize-login'); ?></h3>
-  <?php endif; ?>
-
-  <form id="register" class="register listeo-registration-form" action="<?php echo wp_registration_url(); ?>" method="post">
+  <form enctype="multipart/form-data" class="register listeo-registration-form" id="register" action="<?php echo wp_registration_url(); ?>" method="post">
 
     <div class="listeo-register-form-fields-container">
 
@@ -64,9 +35,9 @@
 
       <?php if (!get_option('listeo_registration_hide_username')) : ?>
         <p class="form-row form-row-wide">
-          <label for="username2">
-            <i class="sl sl-icon-user"></i>
-            <input required placeholder="<?php esc_html_e('Username', 'listeo_core'); ?>" type="text" class="input-text" name="username" id="username2" value="" />
+          <label for="username2" class="tw-relative tw-block tw-m-0">
+            <i class="sl sl-icon-user tw-text-base tw-absolute tw-top-3 tw-left-4 tw-text-gray-400"></i>
+            <input required placeholder="<?php esc_html_e('Username', 'listeo_core'); ?>" type="text" class="!tw-pl-11 !tw-text-base !tw-leading-normal !tw-h-12" name="username" id="username2" value="" />
           </label>
         </p>
       <?php endif; ?>
@@ -84,6 +55,7 @@
             <i class="sl sl-icon-lock tw-text-base tw-absolute tw-top-3 tw-left-4 tw-text-gray-400"></i>
             <input required placeholder="<?php esc_html_e('Password', 'listeo_core'); ?>" class="!tw-pl-11 !tw-text-base !tw-leading-normal !tw-h-12" type="password" name="password" id="password1" />
             <span class="pwstrength_viewport_progress"></span>
+
           </label>
         </p>
       <?php endif; ?>
@@ -103,7 +75,8 @@
         </p>
       <?php endif; ?>
 
-      <?php if (get_option('listeo_otp_status')) { ?>
+
+      <?php if (get_option('listeo_otp_status')) : ?>
         <p class="form-row form-row-wide">
           <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.3/build/js/intlTelInput.min.js"></script>
           <script>
@@ -111,6 +84,7 @@
               const input = document.querySelector("#phone");
               const form = document.querySelector("#register");
               const otpSubmitButton = document.querySelector("#otp_submit");
+
               if (input) {
                 const iti = window.intlTelInput(input, {
                   initialCountry: "auto",
@@ -156,15 +130,18 @@
                   }
                 });
               };
+
               // listen to "keyup", but also "change" to update when the user selects a country
+
+
             });
           </script>
           <label for="phone" class="tw-relative tw-block tw-m-0">
             <i class="sl sl-icon-phone tw-text-base tw-absolute tw-top-3 tw-left-4 tw-text-gray-400"></i>
-            <input required type="tel" placeholder="<?php esc_html_e('Phone', 'listeo_core'); ?>" class="input-text !tw-pl-[65px] !tw-text-base !tw-leading-normal !tw-h-12" name="phone" id="phone" value="" />
+            <input required type="tel" placeholder="<?php esc_html_e('Phone', 'listeo_core'); ?>" class="input-text" name="phone" id="phone" value="" />
           </label>
         </p>
-      <?php } ?>
+      <?php endif ?>
 
       <!-- //extra fields -->
       <div id="listeo-core-registration-fields">
@@ -177,47 +154,40 @@
         </p>
       <?php endif; ?>
 
-      <?php $recaptcha = get_option('listeo_recaptcha');
+      <?php
+      $recaptcha = get_option('listeo_recaptcha');
       $recaptcha_version = get_option('listeo_recaptcha_version', 'v2');
-      if ($recaptcha && $recaptcha_version == 'v2') { ?>
-
+      if ($recaptcha && $recaptcha_version == 'v2') : ?>
         <p class="form-row captcha_wrapper">
         <div class="g-recaptcha" data-sitekey="<?php echo get_option('listeo_recaptcha_sitekey'); ?>"></div>
         </p>
-      <?php }
-
-      if ($recaptcha && $recaptcha_version == 'v3') { ?>
+      <?php elseif ($recaptcha && $recaptcha_version == 'v3') : ?>
         <input type="hidden" id="rc_action" name="rc_action" value="ws_register">
         <input type="hidden" id="token" name="token">
-      <?php } ?>
+      <?php endif ?>
 
       <?php
       $privacy_policy_status = get_option('listeo_privacy_policy');
-
-      if ($privacy_policy_status && function_exists('the_privacy_policy_link')) { ?>
+      if ($privacy_policy_status && function_exists('the_privacy_policy_link')) : ?>
         <p class="form-row margin-top-10 checkboxes margin-bottom-10">
           <input type="checkbox" id="privacy_policy" name="privacy_policy">
           <label for="privacy_policy"><?php esc_html_e('I agree to the', 'listeo_core'); ?> <a target="_blank" href="<?php echo get_privacy_policy_url(); ?>"><?php esc_html_e('Privacy Policy', 'listeo_core'); ?></a> </label>
-
         </p>
-
-      <?php } ?>
+      <?php endif ?>
 
       <?php
       $terms_and_condition_status = get_option('listeo_terms_and_conditions_req');
       $terms_and_condition_status_page = get_option('listeo_terms_and_conditions_page');
-
-      if ($terms_and_condition_status) { ?>
+      if ($terms_and_condition_status) : ?>
         <p class="form-row margin-top-10 checkboxes margin-bottom-10">
           <input type="checkbox" id="terms_and_conditions" name="terms_and_conditions">
           <label for="terms_and_conditions"><?php esc_html_e('I agree to the', 'listeo_core'); ?> <a target="_blank" href="<?php echo get_permalink($terms_and_condition_status_page); ?>"><?php esc_html_e('Terms and Conditions', 'listeo_core'); ?></a> </label>
-
         </p>
-      <?php } ?>
+      <?php endif ?>
 
     </div>
 
-    <?php if (get_option('listeo_otp_status')) { ?>
+    <?php if (get_option('listeo_otp_status')) : ?>
       <div class="otp_registration-wrapper" style="display: none">
         <?php do_action('listeo_before_otp_form'); ?>
         <div class="otp_registration">
@@ -248,17 +218,15 @@
         <input type="submit" class="button border fw margin-top-10" name="register" value="<?php esc_html_e('Register', 'listeo_core'); ?>" />
         <?php do_action('listeo_after_otp_form'); ?>
       </div>
-    <?php } ?>
+    <?php endif ?>
 
     <?php wp_nonce_field('listeo-ajax-login-nonce', 'register_security'); ?>
 
-    <?php if (get_option('listeo_otp_status')) { ?>
-      <a class="button fw margin-top-10 !tw-h-12 !tw-text-base !tw-px-10" id="otp_submit" name="otp"><?php esc_html_e('Register', 'listeo_core'); ?></a>
-    <?php } else { ?>
-      <p class="signup-submit">
-        <input type="submit" name="register" class="register-button !tw-h-12 !tw-text-base !tw-px-10" value="<?php _e('Register', 'personalize-login'); ?>" />
-      </p>
-    <?php } ?>
+    <?php if (get_option('listeo_otp_status')) : ?>
+      <a class="button fw margin-top-10" id="otp_submit" name="otp"><?php esc_html_e('Register', 'listeo_core'); ?></a>
+    <?php else : ?>
+      <input type="submit" class="button border fw margin-top-10" name="register" value="<?php esc_html_e('Register', 'listeo_core'); ?>" />
+    <?php endif ?>
 
     <div class="notification error closeable" style="display: none;margin-top: 20px; margin-bottom: 0px;">
       <p></p>
@@ -271,24 +239,4 @@
     <?php echo listeo_get_extra_registration_fields('guest'); ?>
   </div>
 
-  <?php if (function_exists('_wsl_e')) { ?>
-    <div class="social-login-separator"><span><?php esc_html_e('Sign In with Social Network', 'listeo_core'); ?></span></div>
-    <?php do_action('wordpress_social_login'); ?>
-
-  <?php } ?>
-
-  <?php
-  if (function_exists('mo_openid_initialize_social_login')) { ?>
-    <div class="social-miniorange-container">
-      <div class="social-login-separator"><span><?php esc_html_e('Sign In with Social Network', 'listeo_core'); ?></span></div><?php echo do_shortcode('[miniorange_social_login  view="horizontal" heading=""]');
-                                                                                                                                ?>
-    </div>
-  <?php } ?>
-
-  <?php
-  if (class_exists('NextendSocialLogin', false)) {
-    echo NextendSocialLogin::renderButtonsWithContainer();
-  } ?>
-
-
-</div>
+<?php endif; ?>

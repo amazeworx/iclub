@@ -1,8 +1,8 @@
 <?php
 
 require get_stylesheet_directory() . '/inc/shortcodes.php';
-//require get_stylesheet_directory() . '/inc/register-login.php';
-require get_stylesheet_directory() . '/inc/reg-login.php';
+require get_stylesheet_directory() . '/inc/register-login.php';
+//require get_stylesheet_directory() . '/inc/reg-login.php';
 
 
 add_action('wp_enqueue_scripts', 'listeo_enqueue_styles');
