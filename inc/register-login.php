@@ -670,6 +670,31 @@ function iclub_do_password_reset()
         wp_redirect($redirect_url);
         exit;
       }
+
+      if (strlen($_POST['pass1']) < 8) {
+        $redirect_url = home_url('reset-password');
+        $redirect_url = add_query_arg('key', $rp_key, $redirect_url);
+        $redirect_url = add_query_arg('login', $rp_login, $redirect_url);
+        $redirect_url = add_query_arg('error', 'strong_password', $redirect_url);
+
+        if (get_option('listeo_strong_password')) {
+          $password = $_POST['pass1'];
+          $uppercase = preg_match('@[A-Z]@', $password);
+          $lowercase = preg_match('@[a-z]@', $password);
+          $number    = preg_match('@[0-9]@', $password);
+          $specialChars = preg_match('@[^\w]@', $password);
+
+          /*$error = 'Your password is weak';*/
+          if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
+            wp_redirect($redirect_url);
+            exit;
+          }
+        } else {
+          wp_redirect($redirect_url);
+          exit;
+        }
+      }
+
       // Parameter checks OK, reset password 
       reset_password($user, $_POST['pass1']);
       wp_redirect(home_url('login?password=changed'));
