@@ -239,7 +239,7 @@ if (isset($_GET['updated']) && $_GET['updated'] == 'true') : ?>
 						<div class="my-profile">
 							<div class="row">
 								<div class="col-md-12">
-									<div class="notification notice closeable margin-top-0 margin-bottom-0 mb-4">
+									<div class="notification notice closeable margin-top-0 margin-bottom-20">
 										<p class="leading-tight"><?php esc_html_e('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.', 'listeo_core') ?></p><a class="close" href="#"></a>
 									</div>
 								</div>
@@ -247,13 +247,13 @@ if (isset($_GET['updated']) && $_GET['updated'] == 'true') : ?>
 
 							<?php if (isset($_GET['updated_pass']) && $_GET['updated_pass'] == 'true') : ?>
 								<div class="notification success closeable margin-bottom-35">
-									<p class="leading-tight"><?php esc_html_e('Your password has been updated.', 'listeo_core'); ?></p><a class="close" href="#"></a>
+									<p class="!tw-leading-tight"><?php esc_html_e('Your password has been updated.', 'listeo_core'); ?></p><a class="close" href="#"></a>
 								</div>
 							<?php endif; ?>
 
 							<?php if (isset($_GET['err_pass']) && !empty($_GET['err_pass'])) : ?>
 								<div class="notification error closeable margin-bottom-35">
-									<p class="leading-tight">
+									<p class="!tw-leading-tight">
 										<?php
 										switch ($_GET['err_pass']) {
 											case 'error_1':

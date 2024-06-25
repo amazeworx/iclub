@@ -595,6 +595,7 @@ function iclub_render_password_reset_form($attributes, $content = null)
       $attributes['errors'] = $errors;
       return iclub_get_template_html('password_reset_form', $attributes);
     } else {
+      return iclub_get_template_html('password_reset_form', $attributes);
       return __('Invalid password reset link.', 'iclub');
     }
   }

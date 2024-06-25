@@ -359,6 +359,10 @@
   line-height: 1.25
 }
 
+.\!tw-leading-tight {
+  line-height: 1.25 !important
+}
+
 .tw-text-\[\#4A1172\] {
   --tw-text-opacity: 1;
   color: rgb(74 17 114 / var(--tw-text-opacity))
