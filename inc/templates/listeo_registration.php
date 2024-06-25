@@ -6,6 +6,15 @@
 
 <?php else : ?>
 
+  <!-- Show errors if there are any -->
+  <?php if (count($attributes['errors']) > 0) : ?>
+    <?php foreach ($attributes['errors'] as $error) : ?>
+      <div class="login-error tw-mb-8 tw-py-4 tw-px-6 tw-rounded-md tw-bg-red-100 tw-border-red-300 tw-text-red-500">
+        <?php echo $error; ?>
+      </div>
+    <?php endforeach; ?>
+  <?php endif; ?>
+
   <form enctype="multipart/form-data" class="register listeo-registration-form" id="register" action="<?php echo wp_registration_url(); ?>" method="post">
 
     <div class="listeo-register-form-fields-container">

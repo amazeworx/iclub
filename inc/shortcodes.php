@@ -244,14 +244,14 @@ function listeo_login_form_function($attributes)
       <!-- Show logged out message if user just logged out -->
       <?php if ($attributes['logged_out']) : ?>
         <p class="login-info">
-          <?php _e('You have signed out. Would you like to sign in again?', 'personalize-login'); ?>
+          <?php _e('You have signed out. Would you like to sign in again?', 'iclub'); ?>
         </p>
       <?php endif; ?>
       <?php if ($attributes['registered']) : ?>
         <p class="login-info">
           <?php
           printf(
-            __('You have successfully registered to <strong>%s</strong>. We have emailed your password to the email address you entered.', 'personalize-login'),
+            __('You have successfully registered to <strong>%s</strong>. We have emailed your password to the email address you entered.', 'iclub'),
             get_bloginfo('name')
           );
           ?>
@@ -264,7 +264,7 @@ function listeo_login_form_function($attributes)
       <?php endif; ?>
       <?php if ($attributes['password_updated']) : ?>
         <p class="login-info">
-          <?php _e('Your password has been changed. You can sign in now.', 'personalize-login'); ?>
+          <?php _e('Your password has been changed. You can sign in now.', 'iclub'); ?>
         </p>
       <?php endif; ?>
 
@@ -337,14 +337,14 @@ function iclub_login_form_function($attributes)
       <!-- Show logged out message if user just logged out -->
       <?php if ($attributes['logged_out']) : ?>
         <p class="login-info">
-          <?php _e('You have signed out. Would you like to sign in again?', 'personalize-login'); ?>
+          <?php _e('You have signed out. Would you like to sign in again?', 'iclub'); ?>
         </p>
       <?php endif; ?>
       <?php if ($attributes['registered']) : ?>
         <p class="login-info">
           <?php
           printf(
-            __('You have successfully registered to <strong>%s</strong>. We have emailed your password to the email address you entered.', 'personalize-login'),
+            __('You have successfully registered to <strong>%s</strong>. We have emailed your password to the email address you entered.', 'iclub'),
             get_bloginfo('name')
           );
           ?>
@@ -357,7 +357,7 @@ function iclub_login_form_function($attributes)
       <?php endif; ?>
       <?php if ($attributes['password_updated']) : ?>
         <p class="login-info">
-          <?php _e('Your password has been changed. You can sign in now.', 'personalize-login'); ?>
+          <?php _e('Your password has been changed. You can sign in now.', 'iclub'); ?>
         </p>
       <?php endif; ?>
 
@@ -429,7 +429,7 @@ function iclub_render_login_form($attributes, $content = null)
 
   if (!is_admin()) {
     if (is_user_logged_in()) {
-      return __('You are already signed in.', 'personalize-login');
+      return __('You are already signed in.', 'iclub');
     }
   }
 
@@ -464,9 +464,9 @@ function iclub_render_register_form($attributes, $content = null)
     return iclub_get_template_html('register_form', $attributes);
   } else {
     if (is_user_logged_in()) {
-      return __('You are already signed in.', 'personalize-login');
+      return __('You are already signed in.', 'iclub');
     } elseif (!get_option('users_can_register')) {
-      return __('Registering new users is currently not allowed.', 'personalize-login');
+      return __('Registering new users is currently not allowed.', 'iclub');
     } else {
       return iclub_get_template_html('register_form', $attributes);
     }
@@ -484,18 +484,26 @@ function iclub_render_register_form($attributes, $content = null)
  */
 function iclub_render_listeo_register_form($attributes, $content = null)
 {
-  return;
   // Parse shortcode attributes 
   $default_attributes = array('show_title' => false);
   $attributes = shortcode_atts($default_attributes, $attributes);
 
+  $errors = array();
+  if (isset($_REQUEST['register-errors'])) {
+    $error_codes = explode(',', $_REQUEST['register-errors']);
+    foreach ($error_codes as $code) {
+      $errors[] = iclub_get_error_message($code);
+    }
+  }
+  $attributes['errors'] = $errors;
+
   if (is_admin()) {
-    return iclub_get_template_html('register_form', $attributes);
+    return iclub_get_template_html('listeo_registration', $attributes);
   } else {
     if (is_user_logged_in()) {
-      return __('You are already signed in.', 'personalize-login');
+      return __('You are already signed in.', 'iclub');
     } elseif (!get_option('users_can_register')) {
-      return __('Registering new users is currently not allowed.', 'personalize-login');
+      return __('Registering new users is currently not allowed.', 'iclub');
     } else {
       return iclub_get_template_html('listeo_registration', $attributes);
     }
@@ -550,7 +558,7 @@ function iclub_render_password_lost_form($attributes, $content = null)
   }
 
   if (!is_admin() && is_user_logged_in()) {
-    return __('You are already signed in.', 'personalize-login');
+    return __('You are already signed in.', 'iclub');
   } else {
     return iclub_get_template_html('password_lost_form', $attributes);
   }
@@ -571,7 +579,7 @@ function iclub_render_password_reset_form($attributes, $content = null)
   $default_attributes = array('show_title' => false);
   $attributes = shortcode_atts($default_attributes, $attributes);
   if (!is_admin() && is_user_logged_in()) {
-    return __('You are already signed in.', 'personalize-login');
+    return __('You are already signed in.', 'iclub');
   } else {
     if (!is_admin() && isset($_REQUEST['login']) && isset($_REQUEST['key'])) {
       $attributes['login'] = $_REQUEST['login'];
@@ -587,7 +595,7 @@ function iclub_render_password_reset_form($attributes, $content = null)
       $attributes['errors'] = $errors;
       return iclub_get_template_html('password_reset_form', $attributes);
     } else {
-      return __('Invalid password reset link.', 'personalize-login');
+      return __('Invalid password reset link.', 'iclub');
     }
   }
 }

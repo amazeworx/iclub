@@ -4,6 +4,71 @@
 // add_action( 'register_form', 'listeo_register_form' ); - Ok
 // add_filter( 'registration_errors', 'listeo_wp_admin_registration_errors', 10, 3 ); - Ok
 // add_action( 'user_register', 'listeo_wp_admin_user_register'); - Ok
+// add_action( 'init', 'submit_change_password_form', 10 ); -- Not Ok / Override this.
+
+function iclub_submit_change_password_form()
+{
+  $error = false;
+  if (isset($_POST['listeo_core-password-change']) && '1' == $_POST['listeo_core-password-change']) {
+    $current_user = wp_get_current_user();
+    if (!empty($_POST['current_pass']) && !empty($_POST['pass1']) && !empty($_POST['pass2'])) {
+
+      if (!wp_check_password($_POST['current_pass'], $current_user->user_pass, $current_user->ID)) {
+        /*$error = 'Your current password does not match. Please retry.';*/
+        $error = 'error_1';
+      } elseif ($_POST['pass1'] != $_POST['pass2']) {
+        /*$error = 'The passwords do not match. Please retry.';*/
+        $error = 'error_2';
+      } elseif (strlen($_POST['pass1']) < 8) {
+        if (get_option('listeo_strong_password')) {
+          $password = $_POST['pass1'];
+          $uppercase = preg_match('@[A-Z]@', $password);
+          $lowercase = preg_match('@[a-z]@', $password);
+          $number    = preg_match('@[0-9]@', $password);
+          $specialChars = preg_match('@[^\w]@', $password);
+
+          /*$error = 'Your password is weak';*/
+          if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
+            $error = 'error_7';
+          }
+        } else {
+          /*$error = 'A bit short as a password, don\'t you think?';*/
+          $error = 'error_3';
+        }
+      } elseif (false !== strpos(wp_unslash($_POST['pass1']), "\\")) {
+        /*$error = 'Password may not contain the character "\\" (backslash).';*/
+        $error = 'error_4';
+      } else {
+        $user_id  = wp_update_user(array('ID' => $current_user->ID, 'user_pass' => esc_attr($_POST['pass1'])));
+
+        if (is_wp_error($user_id)) {
+          /*$error = 'An error occurred while updating your profile. Please retry.';*/
+          $error = 'error_5';
+        } else {
+          $error = false;
+          //do_action('edit_user_profile_update', $current_user->ID);
+          wp_redirect(get_permalink() . '?updated_pass=true');
+          exit;
+        }
+      }
+
+      if (!$error) {
+        //do_action('edit_user_profile_update', $current_user->ID);
+        wp_redirect(get_permalink() . '?updated_pass=true');
+        exit;
+      } else {
+        wp_redirect(get_permalink() . '?err_pass=' . $error);
+        exit;
+      }
+    } else {
+      $error = 'error_6';
+      wp_redirect(get_permalink() . '?err_pass=' . $error);
+      exit;
+    }
+  }
+}
+remove_action('init', 'submit_change_password_form', 10);
+add_action('init', 'iclub_submit_change_password_form', 5);
 
 /**
  * Redirects the user to the correct page depending on whether he / she
@@ -385,43 +450,50 @@ add_filter('authenticate', 'iclub_maybe_redirect_at_authenticate', 100, 3);
 function iclub_get_error_message($error_code)
 {
   switch ($error_code) {
+    case 'email_exists':
+      return __('This email is already registered', 'listeo_core');
+      break;
+    case 'username_exists':
+      return __('This username already exists', 'listeo_core');
+      break;
     case 'empty_username':
-      return __('You do have an email address, right?', 'personalize-login');
+      return __('You do have an email address, right?', 'listeo_core');
+      break;
     case 'empty_password':
-      return __('You need to enter a password to login.', 'personalize-login');
+      return __('You need to enter a password to login.', 'listeo_core');
+      break;
+    case 'strong_password':
+      return __('You password is too weak.', 'listeo_core');
+      break;
     case 'invalid_username':
       return __(
         "We don't have any users with that email address. Maybe you used a different one when signing up?",
-        'personalize-login'
+        'listeo_core'
       );
+      break;
     case 'incorrect_password':
       $err = __(
         "The password you entered wasn't quite right. <a href='%s'>Did you forget your password</a>?",
-        'personalize-login'
+        'listeo_core'
       );
       return sprintf($err, wp_lostpassword_url());
-      // Registration errors 
-    case 'email':
-      return __('The email address you entered is not valid.', 'personalize-login');
-    case 'email_exists':
-      return __('An account exists with this email address.', 'personalize-login');
+      break;
     case 'closed':
-      return __('Registering new users is currently not allowed.', 'personalize-login');
+      return __('Registering new users is currently not allowed.', 'iclub');
       // Lost password 
-    case 'empty_username':
-      return __('You need to enter your email address to continue.', 'personalize-login');
     case 'invalid_email':
     case 'invalidcombo':
-      return __('There are no users registered with this email address.', 'personalize-login');
+      return __('There are no users registered with this email address.', 'iclub');
       // Reset password 
     case 'expiredkey':
+      return __('The password reset link you used is expired.', 'iclub');
     case 'invalidkey':
-      return __('The password reset link you used is not valid anymore.', 'personalize-login');
+      return __('The password reset link you used is not valid anymore.', 'iclub');
     case 'password_reset_mismatch':
-      return __("The two passwords you entered don't match.", 'personalize-login');
+      return __("The two passwords you entered don't match.", 'iclub');
 
     case 'password_reset_empty':
-      return __("Sorry, we don't accept empty passwords.", 'personalize-login');
+      return __("Sorry, we don't accept empty passwords.", 'iclub');
     default:
       break;
   }
