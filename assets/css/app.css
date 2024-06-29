@@ -351,16 +351,16 @@
   line-height: 1.5 !important
 }
 
+.\!tw-leading-tight {
+  line-height: 1.25 !important
+}
+
 .tw-leading-normal {
   line-height: 1.5
 }
 
 .tw-leading-tight {
   line-height: 1.25
-}
-
-.\!tw-leading-tight {
-  line-height: 1.25 !important
 }
 
 .tw-text-\[\#4A1172\] {
@@ -383,6 +383,11 @@
   color: rgb(156 163 175 / var(--tw-text-opacity))
 }
 
+.tw-text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity))
+}
+
 .tw-text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity))
@@ -398,6 +403,24 @@ html,
 body {
   font-size: 1rem;
   line-height: 1.5rem
+}
+
+.pwstrength_viewport_progress {
+  margin-bottom: 0.5rem
+}
+
+.pwstrength_instruction {
+  margin-bottom: 1.5rem;
+  display: none;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  line-height: 1.25;
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity))
+}
+
+.pwstrength_viewport_progress.password-strength-visible + .pwstrength_instruction {
+  display: block
 }
 
 @media (min-width: 768px) {

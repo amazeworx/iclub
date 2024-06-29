@@ -84,6 +84,7 @@
             <i class="sl sl-icon-lock tw-text-base tw-absolute tw-top-3 tw-left-4 tw-text-gray-400"></i>
             <input required placeholder="<?php esc_html_e('Password', 'listeo_core'); ?>" class="!tw-pl-11 !tw-text-base !tw-leading-normal !tw-h-12" type="password" name="password" id="password1" />
             <span class="pwstrength_viewport_progress"></span>
+            <span class="pwstrength_instruction"><?php esc_html_e('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.', 'listeo_core'); ?></span>
           </label>
         </p>
       <?php endif; ?>
